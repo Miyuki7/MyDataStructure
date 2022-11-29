@@ -1,33 +1,25 @@
+package List;
+
 /**
  * Created with IntelliJ IDEA.
  *
  * @Author: miyuki
  * @Date: 2022/11
- * @Description:我的ArrayList
+ * @Description: 有动态扩容缩容
  */
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-public class ArrayList<E> {
-    /**
-     * 元素的数量
-     */
-    private int size;
+public class ArrayList2<E> extends AbstractList<E> {
     /**
      * 所有的元素
      */
     private E[] elements;
-
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int ELEMENT_NOT_FOUND = -1;
 
-    public ArrayList(int capaticy) {
+    public ArrayList2(int capaticy) {
         capaticy = (capaticy < DEFAULT_CAPACITY) ? DEFAULT_CAPACITY : capaticy;
         elements = (E[]) new Object[capaticy];
     }
 
-    public ArrayList() {
+    public ArrayList2() {
         this(DEFAULT_CAPACITY);
     }
 
@@ -39,39 +31,11 @@ public class ArrayList<E> {
             elements[i] = null;
         }
         size = 0;
-    }
 
-    /**
-     * 元素的数量
-     * @return
-     */
-    public int size() {
-        return size;
-    }
-
-    /**
-     * 是否为空
-     * @return
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    /**
-     * 是否包含某个元素
-     * @param element
-     * @return
-     */
-    public boolean contains(E element) {
-        return indexOf(element) != ELEMENT_NOT_FOUND;
-    }
-
-    /**
-     * 添加元素到尾部
-     * @param element
-     */
-    public void add(E element) {
-        add(size, element);
+        // 仅供参考
+        if (elements != null && elements.length > DEFAULT_CAPACITY) {
+            elements = (E[]) new Object[DEFAULT_CAPACITY];
+        }
     }
 
     /**
@@ -79,8 +43,9 @@ public class ArrayList<E> {
      * @param index
      * @return
      */
-    public E get(int index) {
+    public E get(int index) { // O(1)
         rangeCheck(index);
+
         return elements[index];
     }
 
@@ -90,7 +55,7 @@ public class ArrayList<E> {
      * @param element
      * @return 原来的元素ֵ
      */
-    public E set(int index, E element) {
+    public E set(int index, E element) { // O(1)
         rangeCheck(index);
 
         E old = elements[index];
@@ -104,6 +69,11 @@ public class ArrayList<E> {
      * @param element
      */
     public void add(int index, E element) {
+        /*
+         * 最好：O(1)
+         * 最坏：O(n)
+         * 平均：O(n)
+         */
         rangeCheckForAdd(index);
 
         ensureCapacity(size + 1);
@@ -113,7 +83,7 @@ public class ArrayList<E> {
         }
         elements[index] = element;
         size++;
-    }
+    } // size是数据规模
 
     /**
      * 删除index位置的元素
@@ -121,6 +91,11 @@ public class ArrayList<E> {
      * @return
      */
     public E remove(int index) {
+        /*
+         * 最好：O(1)
+         * 最坏：O(n)
+         * 平均：O(n)
+         */
         rangeCheck(index);
 
         E old = elements[index];
@@ -128,6 +103,9 @@ public class ArrayList<E> {
             elements[i - 1] = elements[i];
         }
         elements[--size] = null;
+
+        trim();
+
         return old;
     }
 
@@ -137,28 +115,17 @@ public class ArrayList<E> {
      * @return
      */
     public int indexOf(E element) {
-        if (element == null) {  // 1
+        if (element == null) {
             for (int i = 0; i < size; i++) {
                 if (elements[i] == null) return i;
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (element.equals(elements[i])) return i; // n
+                if (element.equals(elements[i])) return i;
             }
         }
         return ELEMENT_NOT_FOUND;
     }
-
-//	public int indexOf2(E element) {
-//		for (int i = 0; i < size; i++) {
-//			if (valEquals(element, elements[i])) return i; // 2n
-//		}
-//		return ELEMENT_NOT_FOUND;
-//	}
-//
-//	private boolean valEquals(Object v1, Object v2) {
-//		return v1 == null ? v2 == null : v1.equals(v2);
-//	}
 
     /**
      * 保证要有capacity的容量
@@ -170,6 +137,9 @@ public class ArrayList<E> {
 
         // 新容量为旧容量的1.5倍
         int newCapacity = oldCapacity + (oldCapacity >> 1);
+
+        // 新容量为旧容量的2倍
+        // int newCapacity = oldCapacity << 1;
         E[] newElements = (E[]) new Object[newCapacity];
         for (int i = 0; i < size; i++) {
             newElements[i] = elements[i];
@@ -179,20 +149,21 @@ public class ArrayList<E> {
         System.out.println(oldCapacity + "扩容为" + newCapacity);
     }
 
-    private void outOfBounds(int index) {
-        throw new IndexOutOfBoundsException("Index:" + index + ", Size:" + size);
-    }
+    private void trim() {
+        // 30
+        int oldCapacity = elements.length;
+        // 15
+        int newCapacity = oldCapacity >> 1;
+        if (size > (newCapacity) || oldCapacity <= DEFAULT_CAPACITY) return;
 
-    private void rangeCheck(int index) {
-        if (index < 0 || index >= size) {
-            outOfBounds(index);
+        // 剩余空间还很多
+        E[] newElements = (E[]) new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newElements[i] = elements[i];
         }
-    }
+        elements = newElements;
 
-    private void rangeCheckForAdd(int index) {
-        if (index < 0 || index > size) {
-            outOfBounds(index);
-        }
+        System.out.println(oldCapacity + "缩容为" + newCapacity);
     }
 
     @Override
@@ -214,5 +185,4 @@ public class ArrayList<E> {
         string.append("]");
         return string.toString();
     }
-
 }
