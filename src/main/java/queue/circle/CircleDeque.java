@@ -64,7 +64,7 @@ public class CircleDeque<E> {
 
 	/**
 	 * 从尾部出队
-	 * @param 
+	 * @param
 	 */
 	public E deQueueRear() {
 		int rearIndex = index(size - 1);
