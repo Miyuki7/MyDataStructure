@@ -1,6 +1,13 @@
 package tree.trees;
 
 import java.util.Comparator;
+/**
+ * Created with IntelliJ IDEA.
+ *
+ * @Author: miyuki
+ * @Date: 2022/12
+ * @Description:
+ */
 @SuppressWarnings("unchecked")
 public class BST<E> extends BinaryTree<E> {
 	private Comparator<E> comparator;

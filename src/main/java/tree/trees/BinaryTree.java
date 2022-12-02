@@ -1,6 +1,4 @@
 package tree.trees;
-
-
 import tree.printer.BinaryTreeInfo;
 
 import java.util.LinkedList;
