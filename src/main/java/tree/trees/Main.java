@@ -2,6 +2,10 @@ package tree.trees;
 
 
 import tree.printer.BinaryTrees;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -14,42 +18,92 @@ public class Main {
 
 	static void test1() {
 		Integer data[] = new Integer[] {
-				7, 4, 9, 2, 5, 8, 11, 3, 12, 1
+				67, 52, 92, 96, 53, 95, 13, 63, 34, 82, 76, 54, 9, 68, 39
 		};
-		
-		BST<Integer> bst = new BST<>();
+
+		AVLTree<Integer> avl = new AVLTree<>();
 		for (int i = 0; i < data.length; i++) {
-			bst.add(data[i]);
+			avl.add(data[i]);
+//			System.out.println("【" + data[i] + "】");
+//			BinaryTrees.println(avl);
+//			System.out.println("---------------------------------------");
 		}
-		
-		BinaryTrees.println(bst);
-		
-		bst.remove(7);
-		
-		BinaryTrees.println(bst);
+
+//		for (int i = 0; i < data.length; i++) {
+//			avl.remove(data[i]);
+//			System.out.println("【" + data[i] + "】");
+//			BinaryTrees.println(avl);
+//			System.out.println("---------------------------------------");
+//		}
+
+
+		BinaryTrees.println(avl);
 	}
-	
+
 	static void test2() {
-		Integer data[] = new Integer[] {
-				// 7, 4
-				// 7, 4, 9
-				// 7, 4, 9, 5
-				// 7, 4, 9, 2
-				// 7, 4, 9, 2, 8
-				7, 4, 9, 2, 1
-		};
-		
-		BST<Integer> bst = new BST<>();
-		for (int i = 0; i < data.length; i++) {
-			bst.add(data[i]);
+		List<Integer> data = new ArrayList<>();
+		for (int i = 0; i < 100_0000; i++) {
+			data.add((int)(Math.random() * 100_0000));
 		}
-		
-		BinaryTrees.println(bst);
-		System.out.println("----------------------------------");
-		System.out.println(bst.isComplete());
+
+		BST<Integer> bst = new BST<>();
+		for (int i = 0; i < data.size(); i++) {
+			bst.add(data.get(i));
+		}
+		for (int i = 0; i < data.size(); i++) {
+			bst.contains(data.get(i));
+		}
+		for (int i = 0; i < data.size(); i++) {
+			bst.remove(data.get(i));
+		}
+
+		AVLTree<Integer> avl = new AVLTree<>();
+		for (int i = 0; i < data.size(); i++) {
+			avl.add(data.get(i));
+		}
+		for (int i = 0; i < data.size(); i++) {
+			avl.contains(data.get(i));
+		}
+		for (int i = 0; i < data.size(); i++) {
+			avl.remove(data.get(i));
+		}
 	}
-	
+
+	static void test3() {
+		Integer data[] = new Integer[] {
+				55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50
+		};
+
+		RBTree<Integer> rb = new RBTree<>();
+		for (int i = 0; i < data.length; i++) {
+			rb.add(data[i]);
+			System.out.println("【" + data[i] + "】");
+			BinaryTrees.println(rb);
+			System.out.println("---------------------------------------");
+		}
+	}
+
+	static void test4() {
+		Integer data[] = new Integer[] {
+				55, 87, 56, 74, 96, 22, 62, 20, 70, 68, 90, 50
+		};
+
+		RBTree<Integer> rb = new RBTree<>();
+		for (int i = 0; i < data.length; i++) {
+			rb.add(data[i]);
+		}
+
+		BinaryTrees.println(rb);
+
+		for (int i = 0; i < data.length; i++) {
+			rb.remove(data[i]);
+			System.out.println("---------------------------------------");
+			System.out.println("【" + data[i] + "】");
+			BinaryTrees.println(rb);
+		}
+	}
+
 	public static void main(String[] args) {
-		test2();
+		test4();
 	}
 }
